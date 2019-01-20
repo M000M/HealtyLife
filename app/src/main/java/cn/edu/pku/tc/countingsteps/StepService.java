@@ -119,7 +119,7 @@ public class StepService extends Service implements SensorEventListener {
         DbUtils.createDb(this, Constant.DB_NAME);
 
         //获取当天的数据
-        List<StepData> list=DbUtils.getQueryByWhere(StepData.class,"today",new String[]{CURRENTDATE});
+        List<StepData> list=DbUtils.getQueryByWhere(StepData.class, "today", new String[]{CURRENTDATE});
         if(list.size()==0||list.isEmpty()){
             //如果获取当天数据为空，则步数为0
             StepDetector.CURRENT_STEP=0;
@@ -203,8 +203,8 @@ public class StepService extends Service implements SensorEventListener {
                 new Intent(this, MainActivity.class), 0);
         builder.setContentIntent(contentIntent);
         builder.setSmallIcon(R.mipmap.ic_notification);
-        builder.setTicker("BasePedo");
-        builder.setContentTitle("BasePedo");
+        builder.setTicker("当前步数");
+        builder.setContentTitle("当前步数");
         //设置不可清除
         builder.setOngoing(true);
         builder.setContentText(content);
@@ -239,25 +239,7 @@ public class StepService extends Service implements SensorEventListener {
         }
     }
 
-    /**
-     * 使用自带的计步传感器
-     *
-     * 说明：
-     *     开始使用这个传感器的时候很头疼，虽然它计步很准确，然而计步一开始就是5w多步，搞不懂它是怎么计算的，而且每天
-     * 都在增长，不会因为日期而清除。今天灵光一闪，我脑海中飘过一个想法，会不会手机上的计步传感器是以一个月为计算周期
-     * 呢？     于是乎，我打开神器QQ，上面有每天的步数，我把这个月的步数加到了一起在和手机上显示的步数进行对比，呵，
-     * 不比不知道，一比吓一跳哈。就差了几百步，我猜测误差是因为QQ定期去得到计步传感器的步数，而我的引用是实时获取。要不然
-     * 就是有点小误差。不过对于11W多步的数据几百步完全可以忽略。从中我可以得到下面两个信息：
-     * 1.手机自带计步传感器存储的步数信息是以一个月为周期进行清算
-     * 2.QQ计步使用的是手机自带的计步传感器   啊哈哈哈
-     *
-     *
-     * 后来当我要改的时候又发现问题了
-     * 我使用了StepDetector.CURRENT_STEP = (int)event.values[0];
-     * 所以它会返回这一个月的步数，当每次传感器发生改变时，我直接让CURRENT_STEP++；就可以从0开始自增了
-     * 不过上面的分析依然正确。不过当使用CURRENT_STEP++如果服务停掉计步就不准了。如果使用计步传感器中
-     * 统计的数据减去之前的数据就是当天的数据了，这样每天走多少步就能准确的显示出来
-     */
+
     private void addCountStepListener(){
         Sensor detectorSensor=sensorManager.getDefaultSensor(Sensor.TYPE_STEP_DETECTOR);
         Sensor countSensor = sensorManager.getDefaultSensor(Sensor.TYPE_STEP_COUNTER);

@@ -58,10 +58,26 @@
             android:layout_gravity="center_horizontal"/>
     </FrameLayout>
 
-    <cn.edu.pku.tc.countingsteps.CompletedView
-        android:id="@+id/circle_view"
+    <TextView
+        android:id="@+id/target"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
         android:layout_below="@id/main_frame_container"
-        android:layout_centerHorizontal="true"/>
+        android:textColor="@color/white"
+        android:textSize="25sp"
+        android:text="今日目标 6000"/>
+
+    <TextView
+        android:id="@+id/progress"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_below="@id/target"
+        android:textColor="@color/white"
+        android:textSize="30sp"
+        android:text="进度 0.0 %"
+        />
+
+
 </RelativeLayout>

@@ -30,6 +30,9 @@ public class MainActivity extends AppCompatActivity implements Handler.Callback{
     private Messenger messenger;  //向服务端发消息
     private Messenger mGetReplayMessager = new Messenger(new Handler(this)); //服务端处理后放回数据的信使
 
+    private TextView progress;
+    private TextView target;
+
     //以bind形式开启service,故有ServiceConnection接受回调
     ServiceConnection conn = new ServiceConnection() {
         @Override
@@ -58,6 +61,17 @@ public class MainActivity extends AppCompatActivity implements Handler.Callback{
             case Constant.MSG_FROM_SERVER:
                 //更新步数
                 text_step.setText(msg.getData().getInt("step") + "");
+                int tempSteps = msg.getData().getInt("step");
+                if(tempSteps <= 6000) {
+                    double tempProgress = tempSteps * 1.0 / 6000;
+                    int tempProgress1 = (int) (tempProgress * 1000);
+                    double tempProgress2 = tempProgress1 * 1.0 / 10;
+                    progress.setText("进度 " + tempProgress2 + "%");
+                }
+                else{
+                    progress.setText("目标完成，恭喜");
+                }
+
                 Log.d("MainActivity", "handleMessage is executed");
                 //每接受到一条服务端返回的信息，就间隔TIME_INTERVAL就向服务端发送消息，然后服务端就会将当前的步数返回
                 delayHandler.sendEmptyMessageDelayed(Constant.REQUEST_SERVER, TIME_INTERVAL);
@@ -84,7 +98,8 @@ public class MainActivity extends AppCompatActivity implements Handler.Callback{
         delayHandler = new Handler(this);
         Log.d("MainActivity", "onCreate is executed");
 
-
+        progress = (TextView)findViewById(R.id.progress);
+        target = (TextView)findViewById(R.id.target);
     }
 
     private void getDate(){
